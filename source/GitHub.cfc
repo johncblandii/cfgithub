@@ -5,6 +5,7 @@
 	<cfset variables.repo = "" />
 	<cfset variables.token = "" />
 	<cfset variables.format = "" />
+	<cfset variables.loggingEnabled = false />
 	
 	<cffunction name="init">
 		<cfargument name="repo" required="true" type="string" />
@@ -15,10 +16,11 @@
 		
 		<cfscript>
 			//store arguments
-			variables.repo 		= arguments.repo;
-			variables.user 	= arguments.user;
-			variables.token 	= arguments.token;
-			variables.format 	= arguments.format;
+			variables.repo 				= arguments.repo;
+			variables.user 				= arguments.user;
+			variables.token 			= arguments.token;
+			variables.format 			= arguments.format;
+			variables.loggingEnabled	= arguments.enableLogging;
 		</cfscript>
 		
 		<cfreturn this />
@@ -40,7 +42,9 @@
 		
 		<cfset arguments.targetUrl = $prepUrl(arguments.targetUrl, arguments.format) />
 		
-		<cftrace category="cfgithub" text="Loading data from #targetUrl#" />
+		<cfif variables.loggingEnabled>
+			<cftrace category="cfgithub" text="Loading data from #targetUrl#" />
+		</cfif>
 		<cfhttp url="#arguments.targetUrl#" method="get" result="result" charset="utf-8" />
 		
 		<cfif trim(result.responseheader.status_code) NEQ 200>

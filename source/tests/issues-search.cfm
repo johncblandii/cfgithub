@@ -1,3 +1,1 @@
-<cfinclude template="_init.cfm" />
-
-<cfdump label="Open - default" var="#github.searchIssues('test', 'open')#" />
+<cfdump label="Open - default" var="#application.github.searchIssues('test', 'open')#" />

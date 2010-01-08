@@ -15,7 +15,7 @@
 <cffunction name="listIssues" access="public" returntype="any">
 	<cfargument name="state" type="string" required="true" hint="'open' or 'closed'" />
 	<cfargument name="format" type="string" required="false" default="#variables.format#" />
-	<cfreturn $getData(targetUrl=$prepIssuesUrl("list/{username}/{repo}/{state}", arguments.state), format=arguments.format) />
+	<cfreturn $getData(targetUrl=$prepIssuesUrl("list/{user}/{repo}/{state}", arguments.state), format=arguments.format) />
 </cffunction>
 
 <cffunction name="searchIssues" access="public" returntype="Any">
