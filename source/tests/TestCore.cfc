@@ -9,7 +9,7 @@
 	<!--- TEST CONFIG INFO --->
 	<cfset this.format = "json" />
 	<cfset this.repo = "cfgithub-test" />
-	<cfset this.user = "johncblandii" />
+	<cfset this.user = "user" />
 	<cfset this.token = "1234" />
 	
 	<cffunction name="setUp" access="public" returntype="void">
