@@ -1,4 +1,7 @@
 <cfcomponent displayname="GitHub API" hint="Interface to GitHub API classes" output="false">
+	<!--- GENERAL PROPERTIES --->
+	<cfset variables.tab = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+	
 	<!--- URL PROPERTIES --->
 	<cfset variables.baseUrl = "http://github.com/api/v2/{format}" />
 	<cfset variables.user = "" />
@@ -26,10 +29,15 @@
 		<cfreturn this />
 	</cffunction>
 	
+<!--- PRIVATE METHODS --->
 	<cffunction name="$prepUrl" access="private">
 		<cfargument name="targetUrl" type="string" required="true" />
-		<cfargument name="format" type="string" required="true" />
-		<cfset arguments.targetUrl = rereplace(arguments.targetUrl, "{format}", arguments.format) />
+		<cfargument name="format" type="string" required="false" />
+		<cfif structkeyexists(arguments, "format")>
+			<cfset arguments.targetUrl = rereplace(arguments.targetUrl, "{format}", arguments.format) />
+		<cfelse>
+			<cfset arguments.targetUrl = rereplace(arguments.targetUrl, "{format}/", "") />
+		</cfif>
 		<cfset arguments.targetUrl = rereplace(arguments.targetUrl, "{repo}", variables.repo, "all") />
 		<cfset arguments.targetUrl = rereplace(arguments.targetUrl, "{user}", variables.user, "all") />
 		<cfreturn arguments.targetUrl /> 
@@ -40,6 +48,7 @@
 		<cfargument name="format" type="string" required="false" default="#variables.format#" />
 		<cfset var result = "" />
 		
+		<!--- Pretty much all GET calls have a format --->
 		<cfset arguments.targetUrl = $prepUrl(arguments.targetUrl, arguments.format) />
 		
 		<cfif variables.loggingEnabled>
@@ -51,7 +60,37 @@
 			<cfthrow errorcode="#result.responseheader.status_code#" type="Custom" message="#result.statuscode#" detail="Attempted url: #arguments.targetUrl#">
 			<cfabort />
 		</cfif>
+		<cfreturn $processData(result.filecontent, arguments.format) />
+	</cffunction>
+	
+	<cffunction name="$postData" access="private">
+		<cfargument name="targetUrl" type="string" required="true" />
+		<cfargument name="format" type="string" required="false" default="#variables.format#" />
+		<cfargument name="postArgs" type="struct" required="true" />
+		<cfset var result = "" />
 		
+		<cfset arguments.targetUrl = $prepUrl(arguments.targetUrl, arguments.format) />
+		
+		<cfif variables.loggingEnabled>
+			<cftrace category="cfgithub" text="Loading data from #targetUrl#" />
+		</cfif>
+		
+		<cfset arguments.postArgs["login"] = variables.user />
+		<cfset arguments.postArgs["token"] = variables.token />
+		
+		<cfhttp url="#arguments.targetUrl#" method="post" result="result" charset="utf-8">
+			<cfloop collection="#arguments.postArgs#" item="item">
+				<cfif variables.loggingEnabled>
+					<cftrace category="cfgithub" text="#tab# #lcase(item)# - #arguments.postArgs[item]#" />
+				</cfif>
+				<cfhttpparam type="formfield" name="#lcase(item)#" value="#arguments.postArgs[item]#" />
+			</cfloop>
+		</cfhttp>
+		
+		<cfif trim(result.responseheader.status_code) NEQ 200>
+			<cfthrow errorcode="#result.responseheader.status_code#" type="Custom" message="#result.statuscode#" detail="Attempted url: #arguments.targetUrl# <br />">
+			<cfabort />
+		</cfif>
 		<cfreturn $processData(result.filecontent, arguments.format) />
 	</cffunction>
 	
@@ -75,6 +114,7 @@
 		<cfreturn arguments.result />
 	</cffunction>
 	
-	
-	<cfinclude template="issues.cfm" />
+<!--- METHOD INCLUDES --->
+	<cfinclude template="_issues.cfm" />
+	<cfinclude template="_general.cfm" />
 </cfcomponent>
