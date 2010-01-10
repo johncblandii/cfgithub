@@ -10,7 +10,7 @@
 	<cfset this.format = "json" />
 	<cfset this.repo = "cfgithub-test" />
 	<cfset this.user = "johncblandii" />
-	<cfset this.token = "0f2cae4dbcc75081579a14273d217f56" />
+	<cfset this.token = "1234" />
 	
 	<cffunction name="setUp" access="public" returntype="void">
 		<cfset this.github = createobject("component", "cfcs.github").init(this.repo, this.user, this.token, this.format, true) />
