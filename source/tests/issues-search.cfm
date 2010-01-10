@@ -1,1 +1,0 @@
-<cfdump label="Open - default" var="#application.github.searchIssues('test', 'open')#" />
