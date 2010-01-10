@@ -1,2 +1,8 @@
 [core]
   excludesfile = /Users/johncblandii/.gitignore
+
+[color] 
+    diff = auto
+    interactive = auto
+    status = auto
+    branch = auto
