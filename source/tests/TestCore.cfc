@@ -5,15 +5,19 @@
  --->
 <cfcomponent extends="mxunit.framework.TestCase">
 	<cfset this.github = "" />
+	<cfset this.testCFC = "" /> <!--- REQUIRED FOR TESTS TO WORK --->
 	
 	<!--- TEST CONFIG INFO --->
 	<cfset this.format = "json" />
-	<cfset this.repo = "cfgithub-test" />
-	<cfset this.user = "user" />
-	<cfset this.token = "1234" />
+	<cfset this.repo = "cfgithub" />
+	<cfset this.user = "johncblandii" />
+	<cfset this.login = "user" />
+	<cfset this.token = "XXX" />
+	<cfset this.protocol = "http" />
 	
+<!--- SETUP/TEARDOWN --->
 	<cffunction name="setUp" access="public" returntype="void">
-		<cfset this.github = createobject("component", "cfcs.github").init(this.repo, this.user, this.token, this.format, true) />
+		<cfset this.github = createobject("component", "cfcs."&this.testCFC).init(this.repo, this.user, this.login, this.token, this.format, this.protocol, true) />
 	</cffunction>
 	
 	<cffunction name="tearDown" access="public" returntype="void">

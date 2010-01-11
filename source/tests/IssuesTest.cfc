@@ -5,7 +5,9 @@
  --->
 <cfcomponent extends="tests.TestCore">
 	<cfset this.testIssueId = 1 />
+	<cfset this.testCFC = "githubissues" />
 
+<!--- ISSUES --->
 	<cffunction name="listAsDefault" access="public" returntype="void">
 		<cfset var result = this.github.listIssues('open') />
 		<cfset debug(result) />
@@ -55,7 +57,33 @@
 	</cffunction>
 	
 	<cffunction name="editIssue">
-		<cfset var result = this.github.editIssue(argumentCollection={id=this.testIssueId, title='cfgithub issue ' & randrange(1, 100), body='here is a test issue from cfgithub unit tests'}) />
+		<cfset var result = this.github.editIssue(argumentCollection={id=this.testIssueId, title='[edited] cfgithub issue ' & randrange(1, 100), body='here is a test issue from cfgithub unit tests'}) />
+		<cfset debug(result) />
+		<cfset assertTrue(isStruct(result)) />
+	</cffunction>
+	
+<!--- LABELS --->
+	<cffunction name="listLabels">
+		<cfset var result = this.github.listLabels() />
+		<cfset debug(result) />
+		<cfset assertTrue(isStruct(result)) />
+	</cffunction>
+	
+	<cffunction name="addLabel">
+		<cfset var result = this.github.addLabel(this.testIssueId, "Enhancement") />
+		<cfset debug(result) />
+		<cfset assertTrue(isStruct(result)) />
+	</cffunction>
+	
+	<cffunction name="removeLabel">
+		<cfset var result = this.github.removeLabel(this.testIssueId, "Enhancement") />
+		<cfset debug(result) />
+		<cfset assertTrue(isStruct(result)) />
+	</cffunction>
+
+<!--- COMMENTS --->
+	<cffunction name="addIssueComment">
+		<cfset var result = this.github.addIssueComment(this.testIssueId, "Enhancement") />
 		<cfset debug(result) />
 		<cfset assertTrue(isStruct(result)) />
 	</cffunction>

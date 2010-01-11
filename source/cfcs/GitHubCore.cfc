@@ -1,28 +1,41 @@
+<!---
+	Name         : GitHubCore
+	Author       : John C. Bland II
+	Created      : January 7, 2010
+	Last Updated : 1/11/2010
+	Purpose		 : Core GitHub API functionality; intended to be overwritten
+--->
 <cfcomponent displayname="GitHub API" hint="Interface to GitHub API classes" output="false">
 	<!--- GENERAL PROPERTIES --->
-	<cfset variables.tab = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
-	
-	<!--- URL PROPERTIES --->
-	<cfset variables.baseUrl = "http://github.com/api/v2/{format}" />
-	<cfset variables.user = "" />
-	<cfset variables.repo = "" />
-	<cfset variables.token = "" />
-	<cfset variables.format = "" />
+	<cfset variables.tab = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" /> <!--- this is only used for logging --->
 	<cfset variables.loggingEnabled = false />
 	
+	<!--- URL PROPERTIES --->
+	<cfset variables.protocol = "http" /> <!--- http or https --->
+	<cfset variables.baseUrl = "{protocol}://github.com/api/v2/{format}" />
+	<cfset variables.user = "" />
+	<cfset variables.login = "" />
+	<cfset variables.repo = "" />
+	<cfset variables.token = "" />
+	<cfset variables.format = "" /> <!--- json, xml, yaml --->
+	
 	<cffunction name="init">
-		<cfargument name="repo" required="true" type="string" />
-		<cfargument name="user" required="true" type="string" />
-		<cfargument name="token" required="false" type="string" />
-		<cfargument name="format" required="false" type="string" />
-		<cfargument name="enableLogging" required="false" type="boolean" default="false" />
+		<cfargument name="repo" required="true" type="string" hint="Repository name" />
+		<cfargument name="user" required="true" type="string" hint="Repository owner's GitHub name" />
+		<cfargument name="login" required="false" type="string" hint="GitHub username" />
+		<cfargument name="token" required="false" type="string" hint="GitHub token" />
+		<cfargument name="format" required="false" type="string" hint="Default data return format" />
+		<cfargument name="protocol" required="false" type="string" hint="http or https">
+		<cfargument name="enableLogging" required="false" type="boolean" default="false" hint="At the moment it purely uses cftrace" />
 		
 		<cfscript>
 			//store arguments
 			variables.repo 				= arguments.repo;
 			variables.user 				= arguments.user;
+			variables.login				= arguments.login;
 			variables.token 			= arguments.token;
 			variables.format 			= arguments.format;
+			variables.protocol			= arguments.protocol;
 			variables.loggingEnabled	= arguments.enableLogging;
 		</cfscript>
 		
@@ -38,6 +51,7 @@
 		<cfelse>
 			<cfset arguments.targetUrl = rereplace(arguments.targetUrl, "{format}/", "") />
 		</cfif>
+		<cfset arguments.targetUrl = rereplace(arguments.targetUrl, "{protocol}", variables.protocol, "all") />
 		<cfset arguments.targetUrl = rereplace(arguments.targetUrl, "{repo}", variables.repo, "all") />
 		<cfset arguments.targetUrl = rereplace(arguments.targetUrl, "{user}", variables.user, "all") />
 		<cfreturn arguments.targetUrl /> 
@@ -54,7 +68,10 @@
 		<cfif variables.loggingEnabled>
 			<cftrace category="cfgithub" text="Loading data from #targetUrl#" />
 		</cfif>
-		<cfhttp url="#arguments.targetUrl#" method="get" result="result" charset="utf-8" />
+		<cfhttp url="#arguments.targetUrl#" method="get" result="result" charset="utf-8">
+			<cfhttpparam type="formfield" name="login" value="#variables.login#" />
+			<cfhttpparam type="formfield" name="token" value="#variables.token#" />
+		</cfhttp>
 		
 		<cfif trim(result.responseheader.status_code) NEQ 200>
 			<cfthrow errorcode="#result.responseheader.status_code#" type="Custom" message="#result.statuscode#" detail="Attempted url: #arguments.targetUrl#">
@@ -75,7 +92,7 @@
 			<cftrace category="cfgithub" text="Loading data from #targetUrl#" />
 		</cfif>
 		
-		<cfset arguments.postArgs["login"] = variables.user />
+		<cfset arguments.postArgs["login"] = variables.login />
 		<cfset arguments.postArgs["token"] = variables.token />
 		
 		<cfhttp url="#arguments.targetUrl#" method="post" result="result" charset="utf-8">
@@ -88,8 +105,7 @@
 		</cfhttp>
 		
 		<cfif trim(result.responseheader.status_code) NEQ 200>
-			<cfthrow errorcode="#result.responseheader.status_code#" type="Custom" message="#result.statuscode#" detail="Attempted url: #arguments.targetUrl# <br />">
-			<cfabort />
+			<cfthrow errorcode="#result.responseheader.status_code#" type="Custom" message="#result.statuscode#" detail="Attempted url: #arguments.targetUrl# <br />#result.filecontent.toString()#">
 		</cfif>
 		<cfreturn $processData(result.filecontent, arguments.format) />
 	</cffunction>
@@ -113,8 +129,4 @@
 		
 		<cfreturn arguments.result />
 	</cffunction>
-	
-<!--- METHOD INCLUDES --->
-	<cfinclude template="_issues.cfm" />
-	<cfinclude template="_general.cfm" />
 </cfcomponent>
