@@ -5,6 +5,7 @@
 	Last Updated : 1/11/2010
 	Purpose		 : General integration for GitHub API (see - http://develop.github.com/p/general.html)
 				 : ...and also covers Git Object APi (see - http://develop.github.com/p/object.html)
+				 : ...and Network API (see - http://develop.github.com/p/network.html)
 --->
 <cfcomponent displayname="GitHubGeneral" extends="GitHubCore" output="false">
 <!--- PRIVATE --->
