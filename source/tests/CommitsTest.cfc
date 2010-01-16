@@ -1,7 +1,7 @@
 <!--- 
- IssuesTest.cfc
+ CommitsTest.cfc
  @author johncblandii
- @description Tests issues GitHub calls
+ @description Tests commit GitHub calls
  --->
 <cfcomponent extends="tests.TestCore">
 	<cfset this.testCFC = "githubcommits" />
