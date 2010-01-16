@@ -18,9 +18,9 @@
 <h2>cfgithub</h2>
 
 <p>
-Nothing to see here really. Go to <a href="http://github.com/johncblandii/cfgithub">GitHub</a> for the latest project status/info.
+Source: <a href="http://github.com/johncblandii/cfgithub">GitHub</a>
 </p>
 
 <p>
-<a href="tests">Click here</a> to run the test scripts.
+Unit Tests: <a href="suites.cfm">Test Suites List</a>
 </p>

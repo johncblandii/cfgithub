@@ -21,4 +21,21 @@
 	limitations under the License.
 --->
 <cfcomponent displayname="GitHubCommits" extends="GitHubCore" output="false">
+	<cffunction name="listCommitsOnBranch" access="public" hint="Listing Commits on a Branch">
+		<cfargument name="branch" required="true" type="string" hint="[branch name]" />
+		<cfargument name="format" type="string" default="#variables.format#" />
+		<cfreturn true />
+	</cffunction>
+	
+	<cffunction name="listCommitsForFile" access="public" hint="Listing Commits for a File">
+		<cfargument name="filePath" required="true" type="string" hint="[branch]/path/to/filename.ext" />
+		<cfargument name="format" type="string" default="#variables.format#" />
+		<cfreturn true />
+	</cffunction>
+	
+	<cffunction name="getCommit" access="public" hint="Listing Commits for a File">
+		<cfargument name="sha" required="true" type="string" hint="See github.com for retrieving a commits 'sha''" />
+		<cfargument name="format" type="string" default="#variables.format#" />
+		<cfreturn true />
+	</cffunction>
 </cfcomponent>
