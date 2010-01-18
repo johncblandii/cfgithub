@@ -32,7 +32,7 @@
 		<cfreturn arguments.targetUrl />
 	</cffunction>
 	
-<!--- REPOS --->
+<!--- GENERAL REPO --->
 	<cffunction name="searchRepos" access="public" hint="Searching Repositories">
 		<cfargument name="query" required="true" type="string" hint="Search query" />
 		<cfargument name="format" type="string" default="#variables.format#" />
@@ -64,6 +64,81 @@
 		<cfargument name="repo" type="string" default="#variables.repo#" hint="Repo name" />
 		<cfargument name="format" type="string" default="#variables.format#" />
 		<cfreturn $getData(targetUrl=$prepReposUrl(arguments.user&"/"&arguments.repo, "unwatch"), format=arguments.format) />
+	</cffunction>
+	
+<!--- COLLABORATORS --->
+	<cffunction name="listRepoCollaborators" access="public" hint="Lists repo collaborators">
+		<cfargument name="user" type="string" default="#variables.user#" hint="GitHub username" />
+		<cfargument name="repo" type="string" default="#variables.repo#" hint="Repo name" />
+		<cfargument name="format" type="string" default="#variables.format#" />
+		<cfreturn $getData(targetUrl=$prepReposUrl(arguments.user&"/"&arguments.repo&"/collaborators", "show"), format=arguments.format) />
+	</cffunction>
+	
+	<cffunction name="addRepoCollaborators" access="public" hint="Adds repo collaborators">
+		<cfargument name="user" type="string" required="true" hint="GitHub username to add as a collaborator" />
+		<cfargument name="repo" type="string" default="#variables.repo#" hint="Repo name" />
+		<cfargument name="format" type="string" default="#variables.format#" />
+		<cfreturn $postData(targetUrl=$prepReposUrl(arguments.repo&"/add/"&arguments.user, "collaborators"), format=arguments.format, postArgs={}) />
+	</cffunction>
+	
+	<cffunction name="removeRepoCollaborators" access="public" hint="List deploy keys for a repo">
+		<cfargument name="user" type="string" required="true" hint="GitHub username" />
+		<cfargument name="repo" type="string" default="#variables.repo#" hint="Repo name" />
+		<cfargument name="format" type="string" default="#variables.format#" />
+		<cfreturn $postData(targetUrl=$prepReposUrl(arguments.repo&"/remove/"&arguments.user, "collaborators"), format=arguments.format, postArgs={}) />
+	</cffunction>
+	
+<!--- DEPLOY KEYS --->
+	<cffunction name="listRepoDeployKeys" access="public" hint="List deploy keys for a repo">
+		<cfargument name="repo" type="string" default="#variables.repo#" hint="Repo name" />
+		<cfargument name="format" type="string" default="#variables.format#" />
+		<cfreturn $getData(targetUrl=$prepReposUrl(arguments.repo, "keys"), format=arguments.format) />
+	</cffunction>
+	
+	<cffunction name="addRepoDeployKey" access="public" hint="Adds a deploy key to a repo">
+		<cfargument name="repo" type="string" default="#variables.repo#" hint="Repo name" />
+		<cfargument name="title" type="string" required="true" hint="Deploy key title" />
+		<cfargument name="key" type="string" required="true" hint="Deploy key" />
+		<cfargument name="format" type="string" default="#variables.format#" />
+		<cfreturn $postData(targetUrl=$prepReposUrl(arguments.repo&"/add", "key"), format=arguments.format, postArgs={title=arguments.title, key=arguments.key}) />
+	</cffunction>
+	
+	<cffunction name="removeRepoDeployKey" access="public" hint="Removes a deploy key from a repo">
+		<cfargument name="repo" type="string" default="#variables.repo#" hint="Repo name" />
+		<cfargument name="id" type="string" required="true" hint="‘id’ variable with the key ID returned from the public listing or key creation" />
+		<cfargument name="format" type="string" default="#variables.format#" />
+		<cfreturn $postData(targetUrl=$prepReposUrl(arguments.repo&"/remove", "key"), format=arguments.format, postArgs={id=arguments.id}) />
+	</cffunction>
+	
+<!--- NETWORK --->
+	<cffunction name="getRepoNetwork" access="public" hint="List network for a repo">
+		<cfargument name="user" type="string" default="#variables.user#" hint="GitHub username" />
+		<cfargument name="repo" type="string" default="#variables.repo#" hint="Repo name" />
+		<cfargument name="format" type="string" default="#variables.format#" />
+		<cfreturn $getData(targetUrl=$prepReposUrl(arguments.user&"/"&arguments.repo&"/network", "show"), format=arguments.format) />
+	</cffunction>
+	
+<!--- LANGUAGES --->
+	<cffunction name="listRepoLanguages" access="public" hint="List languages for a repo">
+		<cfargument name="user" type="string" default="#variables.user#" hint="GitHub username" />
+		<cfargument name="repo" type="string" default="#variables.repo#" hint="Repo name" />
+		<cfargument name="format" type="string" default="#variables.format#" />
+		<cfreturn $getData(targetUrl=$prepReposUrl(arguments.user&"/"&arguments.repo&"/languages", "show"), format=arguments.format) />
+	</cffunction>
+
+<!--- REFS --->
+	<cffunction name="listRepoTags" access="public" hint="List languages for a repo">
+		<cfargument name="user" type="string" default="#variables.user#" hint="GitHub username" />
+		<cfargument name="repo" type="string" default="#variables.repo#" hint="Repo name" />
+		<cfargument name="format" type="string" default="#variables.format#" />
+		<cfreturn $getData(targetUrl=$prepReposUrl(arguments.user&"/"&arguments.repo&"/tags", "show"), format=arguments.format) />
+	</cffunction>
+	
+	<cffunction name="listRepoBranches" access="public" hint="List languages for a repo">
+		<cfargument name="user" type="string" default="#variables.user#" hint="GitHub username" />
+		<cfargument name="repo" type="string" default="#variables.repo#" hint="Repo name" />
+		<cfargument name="format" type="string" default="#variables.format#" />
+		<cfreturn $getData(targetUrl=$prepReposUrl(arguments.user&"/"&arguments.repo&"/branches", "show"), format=arguments.format) />
 	</cffunction>
 	
 <!--- STUB METHODS --->
@@ -120,42 +195,4 @@
 		<cfreturn $postData(targetUrl=$prepReposUrl(verb&"/"&arguments.repo, "set"), format=arguments.format, postArgs={}) />
 		--->
 	</cffunction>
-	
-	<cffunction name="listRepoDeployKeys" access="public" hint="List deploy keys for a repo">
-		<cfargument name="repo" type="string" default="#variables.repo#" hint="Repo name" />
-		<cfargument name="format" type="string" default="#variables.format#" />
-		<cfreturn true />
-		<!---
-		<cfreturn $getData(targetUrl=$prepReposUrl(arguments.repo, "keys"), format=arguments.format) />
-		--->
-	</cffunction>
-	
-	<cffunction name="addRepoDeployKey" access="public" hint="Adds a deploy key to a repo">
-		<cfargument name="repo" type="string" default="#variables.repo#" hint="Repo name" />
-		<cfargument name="title" type="string" required="true" hint="Deploy key title" />
-		<cfargument name="key" type="string" required="true" hint="Deploy key" />
-		<cfargument name="format" type="string" default="#variables.format#" />
-		<cfreturn true />
-		<!---
-		<cfreturn $postData(targetUrl=$prepReposUrl(arguments.repo&"/add", "key"), format=arguments.format, postArgs={title=arguments.title, key=arguments.key}) />
-		--->
-	</cffunction>
-	
-	<cffunction name="removeRepoDeployKey" access="public" hint="Removes a deploy key from a repo">
-		<cfargument name="repo" type="string" default="#variables.repo#" hint="Repo name" />
-		<cfargument name="id" type="string" required="true" hint="‘id’ variable with the key ID returned from the public listing or key creation" />
-		<cfargument name="format" type="string" default="#variables.format#" />
-		<cfreturn true />
-		<!---
-		<cfreturn $postData(targetUrl=$prepReposUrl(arguments.repo&"/remove", "key"), format=arguments.format, postArgs={id=arguments.id}) />
-		--->
-	</cffunction>
-	
-	<!---
-		TODO
-		Collaborators
-		Network
-		Language
-		Refs
-	--->
 </cfcomponent>
