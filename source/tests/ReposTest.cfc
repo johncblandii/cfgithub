@@ -18,8 +18,8 @@
 		<cfset assertTrue(isStruct(result)) />
 	</cffunction>
 	
-	<cffunction name="getUsersRepos" access="public" returntype="void">
-		<cfset var result = this.github.getUsersRepos('johncblandii') />
+	<cffunction name="listUsersRepos" access="public" returntype="void">
+		<cfset var result = this.github.listUsersRepos('johncblandii') />
 		<cfset debug(result) />
 		<cfset assertTrue(isStruct(result)) />
 	</cffunction>

@@ -11,13 +11,13 @@
 	<cffunction name="listAsDefault" access="public" returntype="void">
 		<cfset var result = this.github.listIssues('open') />
 		<cfset debug(result) />
-		<cfset assertTrue(isStruct(result), "not json") />
+		<cfset assertIsStruct(result, "not json") />
 	</cffunction>
 	
 	<cffunction name="listAsXML" access="public" returntype="void">
 		<cfset var result = this.github.listIssues('open', 'xml') />
 		<cfset debug(result) />
-		<cfset assertTrue(isXML(result), "not xml") />
+		<cfset assertIsXML(result, "not xml") />
 	</cffunction>
 	
 	<cffunction name="listAsYAML" access="public" returntype="void">

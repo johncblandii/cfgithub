@@ -46,7 +46,7 @@
 		<cfreturn $getData(targetUrl=$prepReposUrl(arguments.user&"/"&arguments.repo, "show"), format=arguments.format) />
 	</cffunction>
 	
-	<cffunction name="getUsersRepos" access="public" hint="Gets a list of users repos">
+	<cffunction name="listUsersRepos" access="public" hint="Gets a list of users repos">
 		<cfargument name="user" type="string" default="#variables.user#" hint="GitHub username" />
 		<cfargument name="format" type="string" default="#variables.format#" />
 		<cfreturn $getData(targetUrl=$prepReposUrl(arguments.user, "show"), format=arguments.format) />
