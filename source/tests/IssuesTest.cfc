@@ -17,7 +17,7 @@
 	<cffunction name="listAsXML" access="public" returntype="void">
 		<cfset var result = this.github.listIssues('open', 'xml') />
 		<cfset debug(result) />
-		<cfset assertIsXML(result, "not xml") />
+		<cfset assertIsXMLDoc(result, "not xml") />
 	</cffunction>
 	
 	<cffunction name="listAsYAML" access="public" returntype="void">

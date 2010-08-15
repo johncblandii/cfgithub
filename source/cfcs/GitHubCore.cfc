@@ -119,7 +119,7 @@
 			</cfloop>
 		</cfhttp>
 		
-		<cfif trim(result.responseheader.status_code) NEQ 200>
+		<cfif trim(result.responseheader.status_code) GTE 400>
 			<cfthrow errorcode="#result.responseheader.status_code#" type="Custom" message="#result.statuscode#" detail="Attempted url: #arguments.targetUrl# <br />#result.filecontent.toString()#">
 		</cfif>
 		<cfreturn $processData(result.filecontent, arguments.format) />
@@ -129,7 +129,10 @@
 		<cfargument name="result" type="any" required="true" />
 		<cfargument name="format" type="string" required="true" />
 		<cfswitch expression="#arguments.format#">
-			<cfcase value="json,yaml" delimiters=",">
+			<cfcase value="yaml">
+				<!--- return the raw yaml --->
+			</cfcase>
+			<cfcase value="json">
 				<cfset arguments.result = result.toString() />
 				<cfif isjson(arguments.result)>
 					<cfset arguments.result = deserializejson(arguments.result) />
