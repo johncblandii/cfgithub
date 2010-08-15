@@ -1,0 +1,6 @@
+.*
+settings.xml
+mxunit/*
+.DS_Store
+WEB-INF
+*.log

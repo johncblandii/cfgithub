@@ -10,9 +10,9 @@
 	<!--- TEST CONFIG INFO --->
 	<cfset this.format = "json" />
 	<cfset this.repo = "cfgithub" />
-	<cfset this.user = "johncblandii" />
-	<cfset this.login = "user" />
-	<cfset this.token = "XXX" />
+	<cfset this.user = "cfgithubtester" />
+	<cfset this.login = "cfgithubtester" />
+	<cfset this.token = "744d9f3ff80766cf09e880edb8f53326" />
 	<cfset this.protocol = "http" />
 	
 <!--- SETUP/TEARDOWN --->

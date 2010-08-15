@@ -50,8 +50,7 @@
 	
 	<!--- Get the meta information from the test suite --->
 	<cfset testSuiteMeta = getMetaData(testSuite) />
-	
-	<cfset testSuite.addAll("MXUnitInstallTest") />
+	<cfset testSuite.addAll("mxunit.MXUnitInstallTest") />
 	
 	<cfset results = testSuite.run() />
 	

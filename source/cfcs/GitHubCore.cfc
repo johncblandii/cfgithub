@@ -84,8 +84,8 @@
 			<cftrace category="cfgithub" text="Loading data from #targetUrl#" />
 		</cfif>
 		<cfhttp url="#arguments.targetUrl#" method="get" result="result" charset="utf-8">
-			<cfhttpparam type="formfield" name="login" value="#variables.login#" />
-			<cfhttpparam type="formfield" name="token" value="#variables.token#" />
+			<cfhttpparam type="url" name="login" value="#variables.login#" />
+			<cfhttpparam type="url" name="token" value="#variables.token#" />
 		</cfhttp>
 		
 		<cfif trim(result.responseheader.status_code) NEQ 200>
